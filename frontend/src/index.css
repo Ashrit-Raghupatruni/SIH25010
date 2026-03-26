@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap&subset=devanagari,telugu');
+
+@layer base {
+  :root {
+    --background: 40 33% 97%;
+    --foreground: 150 20% 15%;
+
+    --card: 40 30% 99%;
+    --card-foreground: 150 20% 15%;
+
+    --popover: 40 30% 99%;
+    --popover-foreground: 150 20% 15%;
+
+    --primary: 142 50% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 35 80% 56%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 40 20% 92%;
+    --muted-foreground: 150 10% 45%;
+
+    --accent: 142 30% 90%;
+    --accent-foreground: 142 50% 25%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 142 50% 38%;
+
+    --radius: 1rem;
+
+    --earth: 25 40% 42%;
+    --earth-foreground: 0 0% 100%;
+    --sky: 200 70% 50%;
+    --sky-foreground: 0 0% 100%;
+    --sun: 45 95% 55%;
+    --sun-foreground: 0 0% 15%;
+    --leaf: 100 50% 45%;
+    --leaf-foreground: 0 0% 100%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-nunito;
+  }
+}
+
+@layer utilities {
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+}

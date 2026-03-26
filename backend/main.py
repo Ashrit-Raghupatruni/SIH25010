@@ -1,0 +1,37 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from routes import disease, crop_recommendation, soil, weather
+from utils.model_loader import initialize_models
+
+app = FastAPI(
+    title="Smart Agriculture Backend",
+    description="APIs for crop disease detection, crop recommendation, soil analysis and weather integration",
+    version="1.0.0",
+)
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.on_event("startup")
+def startup_event():
+    initialize_models()
+
+
+@app.get("/")
+def root():
+    return {"status": "ok", "message": "Smart Agriculture Backend is running"}
+
+
+app.include_router(disease)
+app.include_router(crop_recommendation)
+app.include_router(soil)
+app.include_router(weather)
