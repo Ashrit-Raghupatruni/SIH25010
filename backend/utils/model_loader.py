@@ -4,8 +4,20 @@ from pathlib import Path
 from typing import Optional
 
 import numpy as np
-from sklearn.base import BaseEstimator
-from tensorflow import keras
+try:
+    from sklearn.base import BaseEstimator
+    HAS_SKLEARN = True
+except Exception as e:
+    HAS_SKLEARN = False
+    BaseEstimator = object
+    print(f"Skipping sklearn due to {e}")
+try:
+    from tensorflow import keras
+    HAS_TF = True
+except Exception as e:
+    HAS_TF = False
+    keras = None
+    print(f"Skipping TF due to {e}")
 
 MODEL_DIR = Path(__file__).resolve().parents[2] / "saved_model"
 DISEASE_MODEL_PATH = MODEL_DIR / "plant_saved_model_tf"
@@ -18,7 +30,7 @@ print("MODEL_DIR:", MODEL_DIR)
 print("Exists:", MODEL_DIR.exists())
 
 class LoadedModels:
-    disease_model: Optional[keras.Model] = None
+    disease_model = None
     crop_model: Optional[BaseEstimator] = None
     class_names: list[str] = []
     disease_solutions: dict[str, str] = {}
@@ -34,20 +46,26 @@ def load_class_names() -> list[str]:
         return [line.strip() for line in f if line.strip()]
 
 
-def load_disease_model() -> keras.Model:
+def load_disease_model():
+    if not HAS_TF:
+        print("TensorFlow not installed. Disease model not loaded.")
+        return None
     if not DISEASE_MODEL_PATH.exists():
         raise FileNotFoundError(f"Disease model folder not found at {DISEASE_MODEL_PATH}")
     model = keras.models.load_model(str(DISEASE_MODEL_PATH))
     return model
 
 
-def load_crop_model() -> Optional[BaseEstimator]:
+def load_crop_model():
     import pickle
-
     if not CROP_MODEL_PATH.exists():
         return None
-    with open(CROP_MODEL_PATH, "rb") as f:
-        return pickle.load(f)
+    try:
+        with open(CROP_MODEL_PATH, "rb") as f:
+            return pickle.load(f)
+    except Exception as e:
+        print("Failed to load crop model:", e)
+        return None
 
 
 def load_disease_solutions() -> dict[str, str]:
@@ -58,10 +76,14 @@ def load_disease_solutions() -> dict[str, str]:
 
 def load_fertilizer_model():
     import pickle
-    if FERTILIZER_MODEL_PATH.exists():
+    if not FERTILIZER_MODEL_PATH.exists():
+        return None
+    try:
         with open(FERTILIZER_MODEL_PATH, "rb") as f:
             return pickle.load(f)
-    return None
+    except Exception as e:
+        print("Failed to load fertilizer model:", e)
+        return None
 
 def initialize_models():
     loaded.disease_model = load_disease_model()

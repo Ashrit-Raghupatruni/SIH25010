@@ -78,5 +78,17 @@
   "popular_crops": "लोकप्रिय फसलें",
 
   "voice_input": "वॉइस इनपुट",
-  "notifications": "सूचनाएँ"
+  "notifications": "सूचनाएं",
+  "auth_welcome": "वापसी पर स्वागत है",
+  "auth_login_sub": "अपने कृषि-मित्र खाते में साइन इन करें",
+  "auth_create": "खाता बनाएं",
+  "auth_register_sub": "शुरू करने के लिए कृषि-मित्र से जुड़ें",
+  "auth_email": "ईमेल",
+  "auth_password": "पासवर्ड",
+  "auth_name": "पूरा नाम",
+  "auth_signin_btn": "साइन इन करें",
+  "auth_signup_btn": "साइन अप करें",
+  "auth_or_google": "या इसके साथ जारी रखें",
+  "auth_no_account": "क्या आपके पास खाता नहीं है?",
+  "auth_yes_account": "क्या आपके पास पहले से खाता है?"
 }

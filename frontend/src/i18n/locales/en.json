@@ -78,5 +78,17 @@
   "popular_crops": "Popular Crops",
 
   "voice_input": "Voice input",
-  "notifications": "Notifications"
+  "notifications": "Notifications",
+  "auth_welcome": "Welcome Back",
+  "auth_login_sub": "Sign in to your KrishiMitra account",
+  "auth_create": "Create Account",
+  "auth_register_sub": "Join KrishiMitra to get started",
+  "auth_email": "Email",
+  "auth_password": "Password",
+  "auth_name": "Full Name",
+  "auth_signin_btn": "Sign in",
+  "auth_signup_btn": "Sign up",
+  "auth_or_google": "Or continue with",
+  "auth_no_account": "Don't have an account?",
+  "auth_yes_account": "Already have an account?"
 }

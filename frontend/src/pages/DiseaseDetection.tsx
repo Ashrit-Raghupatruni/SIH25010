@@ -67,11 +67,13 @@ const DiseaseDetection = () => {
     setError(null);
     try {
       await new Promise((r) => setTimeout(r, 1500));
-      setResult({
+      const mockResult = {
         disease: "Leaf Blight",
         confidence: 92.4,
         solution: "Apply Mancozeb fungicide (2g/L) every 10 days. Remove infected leaves immediately.",
-      });
+      };
+      setResult(mockResult);
+      localStorage.setItem('recentDiseaseResult', mockResult.disease);
     } catch {
       setError(t("server_error"));
     } finally {

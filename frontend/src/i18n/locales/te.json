@@ -78,5 +78,17 @@
   "popular_crops": "ప్రాచుర్యమైన పంటలు",
 
   "voice_input": "వాయిస్ ఇన్‌పుట్",
-  "notifications": "నోటిఫికేషన్లు"
+  "notifications": "నోటిఫికేషన్‌లు",
+  "auth_welcome": "తిరిగి స్వాగతం",
+  "auth_login_sub": "మీ కృషిమిత్ర ఖాతాకు సైన్ ఇన్ చేయండి",
+  "auth_create": "ఖాతాను సృష్టించండి",
+  "auth_register_sub": "ప్రారంభించడానికి కృషిమిత్రలో చేరండి",
+  "auth_email": "ఈమెయిల్",
+  "auth_password": "పాస్‌వర్డ్",
+  "auth_name": "పూర్తి పేరు",
+  "auth_signin_btn": "సైన్ ఇన్ చేయండి",
+  "auth_signup_btn": "సైన్ అప్ చేయండి",
+  "auth_or_google": "లేదా దీనితో కొనసాగించండి",
+  "auth_no_account": "మీకు ఖాతా లేదా?",
+  "auth_yes_account": "మీకు ఇప్పటికే ఖాతా ఉందా?"
 }
