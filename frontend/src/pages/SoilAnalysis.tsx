@@ -5,9 +5,17 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
+import axios from "axios";
+
 const SoilAnalysis = () => {
   const { t } = useTranslation();
-  const [form, setForm] = useState<Record<string, string>>({});
+  const [form, setForm] = useState({
+    ph: "",
+    nitrogen: "",
+    phosphorus: "",
+    potassium: "",
+    organic_carbon: "58", // ✅ DEFAULT VALUE HERE
+  });
   const [result, setResult] = useState<string[] | null>(null);
 
   const soilFields = [
@@ -15,17 +23,30 @@ const SoilAnalysis = () => {
     { key: "nitrogen", label: t("nitrogen_kg"), placeholder: "e.g. 120" },
     { key: "phosphorus", label: t("phosphorus_kg"), placeholder: "e.g. 25" },
     { key: "potassium", label: t("potassium_kg"), placeholder: "e.g. 200" },
-    { key: "organic_carbon", label: t("organic_carbon"), placeholder: "e.g. 0.6" },
+    { key: "organic_carbon", label: t("organic_carbon (optional)"), placeholder: "e.g. 0.6" },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setResult([
-      t("soil_acidic"),
-      t("nitrogen_adequate"),
-      t("phosphorus_low"),
-      t("organic_carbon_good"),
-    ]);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/soil/analyze",
+        {
+          nitrogen: Number(form.nitrogen),
+          phosphorus: Number(form.phosphorus),
+          potassium: Number(form.potassium),
+          ph: Number(form.ph),
+        }
+      );
+
+      console.log("SOIL RESPONSE:", response.data);
+
+      setResult([response.data.message]); // ✅ use backend message
+    } catch (err) {
+      console.error(err);
+      setResult(["Error analyzing soil"]);
+    }
   };
 
   return (

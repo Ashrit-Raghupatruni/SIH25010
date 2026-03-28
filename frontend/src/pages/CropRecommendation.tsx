@@ -4,6 +4,7 @@ import { ArrowLeft, Loader2, Wheat } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 const CropRecommendation = () => {
   const { t } = useTranslation();
@@ -19,21 +20,38 @@ const CropRecommendation = () => {
     { key: "ph", label: t("ph_value"), placeholder: "e.g. 6.5" },
     { key: "temperature", label: t("temperature") + " (°C)", placeholder: "e.g. 25" },
     { key: "humidity", label: t("humidity") + " (%)", placeholder: "e.g. 80" },
+    { key: "rainfall", label: t("rainfall") + " (mm)", placeholder: "e.g. 0.5" },
   ];
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    try {
-      await new Promise((r) => setTimeout(r, 1200));
-      setResult("Rice 🌾");
-    } catch {
-      setError(t("server_error"));
-    } finally {
-      setLoading(false);
-    }
-  };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
+
+  try {
+    const response = await axios.post(
+      "http://localhost:8000/crop/recommend",
+      {
+        nitrogen: Number(form.nitrogen),
+        phosphorus: Number(form.phosphorus),
+        potassium: Number(form.potassium),
+        ph: Number(form.ph),
+        temperature: Number(form.temperature),
+        humidity: Number(form.humidity),
+        rainfall: Number(form.rainfall),
+      }
+    );
+
+    console.log("API RESPONSE:", response.data);
+
+    setResult(response.data.recommended_crop);
+  } catch (err) {
+    console.error(err);
+    setError("Failed to fetch recommendation");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="mx-auto max-w-lg space-y-6">

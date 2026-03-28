@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Bug, Wheat, FlaskConical, CloudSun, IndianRupee } from "lucide-react";
+import { Bug, Wheat, FlaskConical, CloudSun, IndianRupee, Sparkles, Droplets } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const container = {
@@ -16,12 +16,56 @@ const item = {
 const Index = () => {
   const { t } = useTranslation();
 
-  const features = [
-    { title: t("disease_detection"), desc: t("disease_desc"), icon: Bug, to: "/disease", color: "bg-destructive/10 text-destructive" },
-    { title: t("crop_recommendation"), desc: t("crop_desc"), icon: Wheat, to: "/recommend", color: "bg-primary/10 text-primary" },
-    { title: t("soil_analysis"), desc: t("soil_desc"), icon: FlaskConical, to: "/soil", color: "bg-earth/10 text-earth" },
-    { title: t("weather_report"), desc: t("weather_desc"), icon: CloudSun, to: "/weather", color: "bg-sky/10 text-sky" },
-    { title: t("market_prices"), desc: t("market_desc"), icon: IndianRupee, to: "/market", color: "bg-secondary/10 text-secondary" },
+const features = [
+    {
+      title: t("smart_recommendation"),
+      desc: t("smart_desc"),
+      icon: Sparkles,
+      to: "/smart",
+      color: "bg-primary/10 text-primary"
+    },
+    {
+      title: t("disease_detection"),
+      desc: t("disease_desc"),
+      icon: Bug,
+      to: "/disease",
+      color: "bg-destructive/10 text-destructive"
+    },
+    {
+      title: t("crop_recommendation"),
+      desc: t("crop_desc"),
+      icon: Wheat,
+      to: "/recommend",
+      color: "bg-primary/10 text-primary"
+    },
+    {
+      title: t("fertilizer_recommendation"),
+      desc: t("fertilizer_desc"),
+      icon: Droplets,
+      to: "/fertilizer",
+      color: "bg-leaf/10 text-leaf"
+    },
+    {
+      title: t("soil_analysis"),
+      desc: t("soil_desc"),
+      icon: FlaskConical,
+      to: "/soil",
+      color: "bg-earth/10 text-earth"
+    },
+    {
+      title: t("weather_report"),
+      desc: t("weather_desc"),
+      icon: CloudSun,
+      to: "/weather",
+      color: "bg-sky/10 text-sky"
+    },
+    {
+      title: t("market_prices"),
+      desc: t("market_desc"),
+      icon: IndianRupee,
+      to: "/market",
+      color: "bg-secondary/10 text-secondary"
+    },
   ];
 
   return (

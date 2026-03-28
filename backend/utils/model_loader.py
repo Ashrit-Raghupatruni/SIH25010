@@ -12,7 +12,10 @@ DISEASE_MODEL_PATH = MODEL_DIR / "plant_saved_model_tf"
 CLASS_NAMES_PATH = MODEL_DIR / "class_names.txt"
 DISEASE_SOLUTIONS_PATH = Path(__file__).resolve().parents[1] / "models" / "disease_solutions.json"
 CROP_MODEL_PATH = MODEL_DIR / "crop_model.pkl"
+FERTILIZER_MODEL_PATH = MODEL_DIR / "fertilizers.pkl"
 
+print("MODEL_DIR:", MODEL_DIR)
+print("Exists:", MODEL_DIR.exists())
 
 class LoadedModels:
     disease_model: Optional[keras.Model] = None
@@ -53,12 +56,19 @@ def load_disease_solutions() -> dict[str, str]:
             return json.load(f)
     return {}
 
+def load_fertilizer_model():
+    import pickle
+    if FERTILIZER_MODEL_PATH.exists():
+        with open(FERTILIZER_MODEL_PATH, "rb") as f:
+            return pickle.load(f)
+    return None
 
 def initialize_models():
     loaded.disease_model = load_disease_model()
     loaded.class_names = load_class_names()
     loaded.disease_solutions = load_disease_solutions()
     loaded.crop_model = load_crop_model()
+    loaded.fertilizer_model = load_fertilizer_model()
 
 
 def get_disease_model():
@@ -79,3 +89,8 @@ def get_class_names():
 
 def get_disease_solutions():
     return loaded.disease_solutions
+
+def get_fertilizer_model():
+    if loaded.fertilizer_model is None:
+        raise RuntimeError("Fertilizer model not loaded")
+    return loaded.fertilizer_model

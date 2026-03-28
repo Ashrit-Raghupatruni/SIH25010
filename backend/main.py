@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+load_dotenv()
 
-from routes import disease, crop_recommendation, soil, weather
+from routes import disease, crop_recommendation, soil, weather, fertilizer
 from utils.model_loader import initialize_models
 
 app = FastAPI(
@@ -35,3 +37,4 @@ app.include_router(disease)
 app.include_router(crop_recommendation)
 app.include_router(soil)
 app.include_router(weather)
+app.include_router(fertilizer)

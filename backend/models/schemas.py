@@ -8,6 +8,7 @@ class CropRecommendationInput(BaseModel):
     ph: confloat(ge=3.5, le=10.0) = Field(..., description="Soil pH")
     temperature: confloat(ge=-20.0, le=60.0) = Field(..., description="Degrees Celsius")
     humidity: confloat(ge=0.0, le=100.0) = Field(..., description="Relative humidity percentage")
+    rainfall: confloat(ge=0.0, le=1000.0) = Field(..., description="Rainfall in mm")
 
 
 class SoilAnalysisInput(BaseModel):
@@ -21,3 +22,20 @@ class SoilAnalysisOutput(BaseModel):
     status: str
     message: str
     ocr_ready: bool
+
+class SmartCropInput(BaseModel):
+    location: str
+    nitrogen: int
+    phosphorus: int
+    potassium: int
+    ph: float
+
+class FertilizerInput(BaseModel):
+    temperature: float
+    humidity: float
+    moisture: float
+    soil_type: str
+    crop_type: str
+    nitrogen: int
+    potassium: int
+    phosphorus: int

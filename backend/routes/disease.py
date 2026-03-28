@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
-
+import tensorflow as tf
 from utils.model_loader import get_disease_model, get_class_names, get_disease_solutions
 from utils.preprocessing import preprocess_image
 
@@ -19,9 +19,13 @@ async def detect_disease(file: UploadFile = File(...)):
     try:
         img = preprocess_image(body, target_size=(224, 224))
         model = get_disease_model()
-        probs = model.predict(img, verbose=0)
+        infer = model.signatures["serving_default"]
+        output = infer(tf.constant(img, dtype=tf.float16))
+        probs = list(output.values())[0].numpy().squeeze()
         if probs.ndim == 2 and probs.shape[0] == 1:
             probs = probs[0]
+        print("RAW PROBS:", probs[:5])
+        print("SUM:", probs.sum())
 
         class_names = get_class_names()
         if len(class_names) != len(probs):
@@ -34,6 +38,10 @@ async def detect_disease(file: UploadFile = File(...)):
         solutions = get_disease_solutions()
         recommended_solution = solutions.get(disease_name, "No solution available")
 
+        top5 = probs.argsort()[-5:][::-1]
+
+        for i in top5:
+            print(class_names[i], probs[i])
         return JSONResponse(
             status_code=200,
             content={

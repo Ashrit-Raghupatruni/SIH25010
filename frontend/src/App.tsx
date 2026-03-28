@@ -11,6 +11,10 @@ import SoilAnalysis from "./pages/SoilAnalysis";
 import Weather from "./pages/Weather";
 import MarketPrices from "./pages/MarketPrices";
 import NotFound from "./pages/NotFound";
+import SmartRecommendation from "./pages/SmartRecommendation";
+import FertilizerRecommendation from "./pages/FertilizerRecommendation";
+import AgriAssistant from "./pages/AgriAssistant";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +30,10 @@ const App = () => (
             <Route path="/disease" element={<DiseaseDetection />} />
             <Route path="/recommend" element={<CropRecommendation />} />
             <Route path="/soil" element={<SoilAnalysis />} />
+            <Route path="/assistant" element={<AgriAssistant />} />
+            <Route path="/smart" element={<SmartRecommendation />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/fertilizer" element={<FertilizerRecommendation />} />
             <Route path="/weather" element={<Weather />} />
             <Route path="/market" element={<MarketPrices />} />
           </Route>
