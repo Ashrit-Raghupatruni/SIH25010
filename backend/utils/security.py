@@ -6,9 +6,9 @@ from passlib.context import CryptContext
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-super-secret-key-change-it")
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "helloworld")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "879911991392-78jramr0op8lod00a3c3bjg4s079dcnr.apps.googleusercontent.com")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

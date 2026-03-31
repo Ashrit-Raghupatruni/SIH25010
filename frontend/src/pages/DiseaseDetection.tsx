@@ -1,9 +1,10 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Camera, Upload, ArrowLeft, Loader2, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 interface DiseaseResult {
   disease: string;
@@ -33,11 +34,16 @@ const DiseaseDetection = () => {
     }
   };
 
+  useEffect(() => {
+    if (cameraOpen && videoRef.current && streamRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+    }
+  }, [cameraOpen]);
+
   const startCamera = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
       streamRef.current = stream;
-      if (videoRef.current) videoRef.current.srcObject = stream;
       setCameraOpen(true);
     } catch {
       setError(t("camera_error"));
@@ -61,20 +67,41 @@ const DiseaseDetection = () => {
     setCameraOpen(false);
   };
 
+  const base64ToBlob = (base64: string) => {
+    const byteString = atob(base64.split(',')[1]);
+    const mimeString = base64.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  };
+
   const handleSubmit = async () => {
     if (!image) return;
     setLoading(true);
     setError(null);
     try {
-      await new Promise((r) => setTimeout(r, 1500));
-      const mockResult = {
-        disease: "Leaf Blight",
-        confidence: 92.4,
-        solution: "Apply Mancozeb fungicide (2g/L) every 10 days. Remove infected leaves immediately.",
+      const blob = base64ToBlob(image);
+      const formData = new FormData();
+      formData.append("file", blob, "image.jpg");
+
+      const response = await axios.post("http://localhost:8000/disease/detect", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      const { disease_name, confidence, recommended_solution } = response.data;
+      const apiResult = {
+        disease: disease_name,
+        confidence: Math.round(confidence * 1000) / 10,
+        solution: recommended_solution,
       };
-      setResult(mockResult);
-      localStorage.setItem('recentDiseaseResult', mockResult.disease);
-    } catch {
+
+      setResult(apiResult);
+      localStorage.setItem('recentDiseaseResult', apiResult.disease);
+    } catch (err: any) {
+      console.error(err);
       setError(t("server_error"));
     } finally {
       setLoading(false);

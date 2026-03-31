@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 load_dotenv()
 
-from routes import disease, crop_recommendation, soil, weather, fertilizer, auth, chatbot
+from routes import disease, crop_recommendation, soil, weather, fertilizer, auth, chatbot,price
 from utils.model_loader import initialize_models
 from database import engine, Base
 
@@ -45,3 +45,4 @@ app.include_router(weather)
 app.include_router(fertilizer)
 app.include_router(auth.router)
 app.include_router(chatbot.router)
+app.include_router(price.router)

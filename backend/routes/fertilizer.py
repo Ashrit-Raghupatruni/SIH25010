@@ -5,24 +5,9 @@ from utils.model_loader import get_fertilizer_model
 
 router = APIRouter(prefix="/fertilizer", tags=["fertilizer"])
 
+soil_mapping ={0: 'Black', 1: 'Clayey', 2: 'Loamy', 3: 'Red', 4: 'Sandy'}
 
-# 🔧 Example mappings (adjust based on training)
-soil_mapping = {
-    "sandy": 0,
-    "loamy": 1,
-    "black": 2,
-    "red": 3,
-    "clay": 4
-}
-
-crop_mapping = {
-    "rice": 0,
-    "maize": 1,
-    "cotton": 2,
-    "sugarcane": 3,
-    # extend as needed
-}
-
+crop_mapping ={0: 'Barley', 1: 'Cotton', 2: 'Ground Nuts', 3: 'Maize', 4: 'Millets', 5: 'Oil seeds', 6: 'Paddy', 7: 'Pulses', 8: 'Sugarcane', 9: 'Tobacco', 10: 'Wheat'}
 
 @router.post("/recommend")
 async def recommend_fertilizer(payload: FertilizerInput):
