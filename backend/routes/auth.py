@@ -90,3 +90,8 @@ def google_auth(google_data: GoogleLogin, db: Session = Depends(get_db)):
     
     access_token = create_access_token(data={"sub": user.email, "name": user.full_name})
     return {"access_token": access_token, "token_type": "bearer"}
+
+@router.post("/guest", response_model=Token)
+def guest_auth():
+    access_token = create_access_token(data={"sub": "guest@krishimitra.com", "name": "Guest User"})
+    return {"access_token": access_token, "token_type": "bearer"}
