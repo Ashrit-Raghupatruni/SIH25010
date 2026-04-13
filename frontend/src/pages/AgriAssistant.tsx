@@ -21,7 +21,6 @@ const AgriAssistant = () => {
     try {
       setLoading(true);
       setResult(null);
-      localStorage.setItem("agri_result", JSON.stringify(response.data));
 
       const response = await axios.post(
         "http://localhost:8000/crop/smart",
@@ -34,6 +33,7 @@ const AgriAssistant = () => {
         }
       );
 
+      localStorage.setItem("agri_result", JSON.stringify(response.data));
       setResult(response.data);
     } catch (err) {
       console.error(err);

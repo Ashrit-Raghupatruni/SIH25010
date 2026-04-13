@@ -30,7 +30,6 @@ class GoogleLogin(BaseModel):
 
 @router.post("/register", response_model=Token)
 def register(user_data: UserCreate, db: Session = Depends(get_db)):
-    # Check if user exists
     db_user = db.query(User).filter(User.email == user_data.email).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -90,4 +89,9 @@ def google_auth(google_data: GoogleLogin, db: Session = Depends(get_db)):
         db.refresh(user)
     
     access_token = create_access_token(data={"sub": user.email, "name": user.full_name})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@router.post("/guest", response_model=Token)
+def guest_auth():
+    access_token = create_access_token(data={"sub": "guest@krishimitra.com", "name": "Guest User"})
     return {"access_token": access_token, "token_type": "bearer"}

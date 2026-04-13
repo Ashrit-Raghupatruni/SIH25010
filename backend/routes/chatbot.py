@@ -1,12 +1,8 @@
+import requests
+import json
 import os
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-try:
-    import google.generativeai as genai
-    HAS_GENAI = True
-except Exception as e:
-    HAS_GENAI = False
-    print(f"Skipping GenAI due to {e}")
 
 router = APIRouter(prefix="/api/chat", tags=["chatbot"])
 
@@ -16,19 +12,18 @@ class ChatRequest(BaseModel):
     context: str = ""
 
 @router.post("/")
-async def chat_with_agribot(req: ChatRequest):
+def chat_with_agribot(req: ChatRequest):
     api_key = os.getenv("GOOGLE_API_KEY")
-    if not HAS_GENAI or not api_key:
+    if api_key:
+        api_key = api_key.strip()
+        
+    if not api_key:
         raise HTTPException(
             status_code=500, 
-            detail="AI Assistant is not configured. Please ensure google-generativeai is installed and GOOGLE_API_KEY is set."
+            detail="AI Assistant is not configured. Please ensure GOOGLE_API_KEY is set."
         )
-    
-    genai.configure(api_key=api_key)
-    try:
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        
-        system_prompt = f"""
+
+    system_prompt = f"""
 You are AgriBot, an expert agricultural assistant designed to help farmers.
 You MUST respond in the following language: {req.language}.
 If the language is 'te' or 'Telugu', respond in Telugu script.
@@ -40,9 +35,27 @@ Here is the recent context from the user's dashboard (e.g., soil analysis, plant
 
 Your advice should be practical, farmer-friendly, and actionable. Keep your response concise (under 3-4 sentences) so it can be easily read out loud by a voice synthesizer. Avoid markdown formatting like asterisks or hash symbols, keep it plain text suitable for speech.
 """
+
+    full_prompt = f"{system_prompt}\n\nFarmer says: {req.message}"
+    
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+    headers = {'Content-Type': 'application/json'}
+    data = {
+        "contents": [{"parts":[{"text": full_prompt}]}]
+    }
+
+    try:
+        response = requests.post(url, headers=headers, json=data, timeout=30)
+        response.raise_for_status()
+        resp_json = response.json()
         
-        full_prompt = f"{system_prompt}\n\nFarmer says: {req.message}"
-        response = model.generate_content(full_prompt)
-        return {"response": response.text}
+        bot_response = resp_json.get("candidates", [{}])[0].get("content", {}).get("parts", [{}])[0].get("text", "")
+        print("FULL GEMINI RESPONSE:", resp_json)
+        if not bot_response:
+            return {"response": "Sorry, I am having trouble understanding the response."}
+            
+        return {"response": bot_response}
+
     except Exception as e:
+        print("Error calling Gemini API:", str(e))
         raise HTTPException(status_code=500, detail=str(e))

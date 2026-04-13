@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
-import { 
-  Home, Sparkles, Bug, FlaskConical, Droplets, CloudSun, IndianRupee, Wheat, Menu, X 
+import {
+  Home, Sparkles, Bug, FlaskConical, Droplets, CloudSun, IndianRupee, Wheat, Menu, X
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -14,12 +14,12 @@ const Sidebar = () => {
 
   const navigation = [
     { name: t("home") ?? "Dashboard", to: "/dashboard", icon: Home },
-    { name: t("smart_recommendation"), to: "/smart", icon: Sparkles },
+    { name: t("smart recommendation"), to: "/smart", icon: Sparkles },
     { title: "Analysis Tools", type: "heading" },
-    { name: t("disease_detection"), to: "/disease", icon: Bug },
-    { name: t("soil_analysis"), to: "/soil", icon: FlaskConical },
-    { name: t("fertilizer_recommendation"), to: "/fertilizer", icon: Droplets },
-    { name: t("crop_recommendation"), to: "/recommend", icon: Wheat },
+    { name: t("disease detection"), to: "/disease", icon: Bug },
+    { name: t("soil analysis"), to: "/soil", icon: FlaskConical },
+    { name: t("fertilizer recommendation"), to: "/fertilizer", icon: Droplets },
+    { name: t("crop recommendation"), to: "/recommend", icon: Wheat },
     { title: "Insights", type: "heading" },
     { name: t("weather_report"), to: "/weather", icon: CloudSun },
     { name: t("market_prices"), to: "/market", icon: IndianRupee },

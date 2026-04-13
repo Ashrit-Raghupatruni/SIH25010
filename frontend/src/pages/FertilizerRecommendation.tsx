@@ -5,8 +5,8 @@ const FertilizerRecommendation = () => {
   const [form, setForm] = useState({
     temperature: "",
     humidity: "",
-    moisture: "",
-    soil_type: "",
+    ph: "",
+    rainfall: "",
     crop_type: "",
     nitrogen: "",
     potassium: "",
@@ -30,9 +30,9 @@ const FertilizerRecommendation = () => {
         {
           temperature: Number(form.temperature),
           humidity: Number(form.humidity),
-          moisture: Number(form.moisture),
-          soil_type: form.soil_type,
-          crop_type: form.crop_type,
+          ph: Number(form.ph),
+          rainfall: Number(form.rainfall),
+          label: form.crop_type,
           nitrogen: Number(form.nitrogen),
           potassium: Number(form.potassium),
           phosphorus: Number(form.phosphorus),
@@ -59,17 +59,8 @@ const FertilizerRecommendation = () => {
 
         <input name="temperature" placeholder="Temperature (°C)" className="p-3 border rounded-lg" onChange={handleChange} />
         <input name="humidity" placeholder="Humidity (%)" className="p-3 border rounded-lg" onChange={handleChange} />
-        <input name="moisture" placeholder="Soil Moisture" className="p-3 border rounded-lg" onChange={handleChange} />
-
-        {/* Soil Type */}
-        <select name="soil_type" className="p-3 border rounded-lg" onChange={handleChange}>
-          <option value="">Select Soil Type</option>
-          <option value="sandy">Sandy</option>
-          <option value="loamy">Loamy</option>
-          <option value="black">Black</option>
-          <option value="red">Red</option>
-          <option value="clay">Clay</option>
-        </select>
+        <input name="ph" placeholder="Soil pH" className="p-3 border rounded-lg" onChange={handleChange} />
+        <input name="rainfall" placeholder="Rainfall (mm)" className="p-3 border rounded-lg" onChange={handleChange} />
 
         {/* Crop Type */}
         <select name="crop_type" className="p-3 border rounded-lg" onChange={handleChange}>

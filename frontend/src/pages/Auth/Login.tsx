@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useAuth } from '../../context/AuthContext';
-import { Mail, Lock, LogIn, Leaf } from 'lucide-react';
+import { Mail, Lock, LogIn, Leaf, User } from 'lucide-react';
 import axios from 'axios';
 import { GoogleLogin } from '@react-oauth/google';
 
@@ -44,6 +44,19 @@ const Login = () => {
       login(response.data.access_token);
     } catch (error) {
        toast.error('Google Login failed.');
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post(`${API_URL}/auth/guest`);
+      toast.success('Logged in as Guest!');
+      login(response.data.access_token);
+    } catch (error) {
+      toast.error('Guest Login failed.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -121,7 +134,7 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="mt-6 flex justify-center">
+          <div className="mt-6 flex flex-col items-center gap-3">
              <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={() => {
@@ -131,6 +144,15 @@ const Login = () => {
                 size="large"
                 shape="pill"
              />
+             <button
+               onClick={handleGuestLogin}
+               type="button"
+               disabled={isLoading}
+               className="w-full max-w-[200px] flex justify-center items-center py-2 px-4 rounded-full border border-gray-300 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+             >
+               <User size={18} className="mr-2" />
+               Guest Access
+             </button>
           </div>
         </div>
 
