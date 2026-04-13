@@ -304,7 +304,7 @@ SIH25010/
 │   │
 │   └── 📁 public/
 │
-├── 📄 README.md                # This file
+├── 📄 README.md                
 ├── 📄 .gitignore
 └── 📄 LICENSE
 
@@ -759,7 +759,7 @@ Built with dedication to solve real-world agricultural challenges 🌾
 - ♻️ Sustainability & Eco-friendly
 
 **Contributors:**
-- Lead Developer: [Ashrit Raghupatruni](https://github.com/Ashrit-Raghupatruni)
+- Lead Developer: [Ashrit Raghupatruni](https://github.com/Ashrit-Raghupatruni), [Mohan Chandra](https://github.com/Mohan0621) and [Yashwanth Dogga](https://github.com/yashwanth-lqng)
 - And more amazing farmers/developers working on this mission!
 
 Want to join? [Submit a Pull Request](https://github.com/Ashrit-Raghupatruni/SIH25010/pulls)
