@@ -58,6 +58,7 @@
   "use_gps": "Use GPS",
   "current_conditions": "Current Conditions",
   "rain_chance": "Rain Chance",
+  "rainfall": "Rainfall (1h)",
   "gps_not_supported": "GPS not supported on this device.",
   "location_denied": "Location access denied. Enter manually.",
   "weather_error": "Failed to fetch weather data.",

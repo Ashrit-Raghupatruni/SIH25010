@@ -31,11 +31,11 @@ class SmartCropInput(BaseModel):
     ph: float
 
 class FertilizerInput(BaseModel):
-    temperature: float
-    humidity: float
-    moisture: float
-    soil_type: str
-    crop_type: str
-    nitrogen: int
-    potassium: int
-    phosphorus: int
+    nitrogen: int = Field(..., description="Nitrogen (N) in soil")
+    phosphorus: int = Field(..., description="Phosphorus (P) in soil")
+    potassium: int = Field(..., description="Potassium (K) in soil")
+    temperature: float = Field(..., description="Degrees Celsius")
+    humidity: float = Field(..., description="Relative humidity percentage")
+    ph: float = Field(..., description="Soil pH")
+    rainfall: float = Field(..., description="Rainfall in mm")
+    label: str = Field(..., description="Crop label")

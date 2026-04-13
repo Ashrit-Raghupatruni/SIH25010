@@ -36,7 +36,8 @@ async def current_weather(request: WeatherRequest):
             "location": request.location,
             "temperature": data["main"]["temp"],
             "humidity": data["main"]["humidity"],
-            "rainfall": data.get("rain", {}).get("30d", 0.0),
+            "rainfall": data.get("rain", {}).get("1h", 0.0),
+            "description": data["weather"][0]["description"].title() if data.get("weather") else "Unknown",
         }
     except requests.exceptions.RequestException as e:
         raise HTTPException(status_code=502, detail=str(e))
@@ -72,7 +73,7 @@ def fetch_weather(location: str):
         "location": location,
         "temperature": data["main"]["temp"],
         "humidity": data["main"]["humidity"],
-        "rainfall": data.get("rain", {}).get("1h", 0.0),
+        "rainfall": data.get("rain", {}).get("30d", 0.0),
     }
     weather_cache[location] = (result, time.time())
 

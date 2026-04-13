@@ -57,9 +57,29 @@ async def recommend_crop(payload: CropRecommendationInput):
     ]
 
     try:
-        predicted_crop = model.predict(features)
-        index = int(predicted_crop[0])
-        recommended = crop_labels[index]
+        try:
+            import pandas as pd
+            features_df = pd.DataFrame([{
+                'N': payload.nitrogen,
+                'P': payload.phosphorus,
+                'K': payload.potassium,
+                'temperature': payload.temperature,
+                'humidity': payload.humidity,
+                'ph': payload.ph,
+                'rainfall': payload.rainfall
+            }])
+            predicted_crop = model.predict(features_df)
+        except Exception:
+            predicted_crop = model.predict(features)
+            
+        if isinstance(predicted_crop[0], str):
+            recommended = predicted_crop[0]
+        else:
+            try:
+                index = int(predicted_crop[0])
+                recommended = crop_labels[index] if index < len(crop_labels) else str(predicted_crop[0])
+            except Exception:
+                recommended = str(predicted_crop[0])
 
         # ✅ use advice function
         advice = analyze_conditions(payload)
@@ -99,10 +119,29 @@ async def full_recommendation(payload: CropRecommendationInput):
     ]
 
     try:
-        # 🌾 Crop prediction
-        predicted_crop = model.predict(features)
-        index = int(predicted_crop[0])
-        recommended = crop_labels[index]
+        try:
+            import pandas as pd
+            features_df = pd.DataFrame([{
+                'N': payload.nitrogen,
+                'P': payload.phosphorus,
+                'K': payload.potassium,
+                'temperature': payload.temperature,
+                'humidity': payload.humidity,
+                'ph': payload.ph,
+                'rainfall': payload.rainfall
+            }])
+            predicted_crop = model.predict(features_df)
+        except Exception:
+            predicted_crop = model.predict(features)
+            
+        if isinstance(predicted_crop[0], str):
+            recommended = predicted_crop[0]
+        else:
+            try:
+                index = int(predicted_crop[0])
+                recommended = crop_labels[index] if index < len(crop_labels) else str(predicted_crop[0])
+            except Exception:
+                recommended = str(predicted_crop[0])
 
         # 🌱 Reuse soil logic
         advice = analyze_conditions(payload)
@@ -160,8 +199,29 @@ def smart_recommendation(payload: SmartCropInput):
             rainfall
         ]]
 
-        predicted_crop = model.predict(features)
-        recommended = crop_labels[int(predicted_crop[0])]
+        try:
+            import pandas as pd
+            features_df = pd.DataFrame([{
+                'N': payload.nitrogen,
+                'P': payload.phosphorus,
+                'K': payload.potassium,
+                'temperature': temperature,
+                'humidity': humidity,
+                'ph': payload.ph,
+                'rainfall': rainfall
+            }])
+            predicted_crop = model.predict(features_df)
+        except Exception:
+            predicted_crop = model.predict(features)
+            
+        if isinstance(predicted_crop[0], str):
+            recommended = predicted_crop[0]
+        else:
+            try:
+                index = int(predicted_crop[0])
+                recommended = crop_labels[index] if index < len(crop_labels) else str(predicted_crop[0])
+            except Exception:
+                recommended = str(predicted_crop[0])
 
         advice = analyze_conditions(payload)
 

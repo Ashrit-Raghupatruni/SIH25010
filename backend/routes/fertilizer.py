@@ -1,42 +1,58 @@
 import traceback
+
 from fastapi import APIRouter, HTTPException
 from models.schemas import FertilizerInput
-from utils.model_loader import get_fertilizer_model
+from utils.model_loader import get_fertilizer_model, get_fertname_dict
 
 router = APIRouter(prefix="/fertilizer", tags=["fertilizer"])
-
-soil_mapping ={0: 'Black', 1: 'Clayey', 2: 'Loamy', 3: 'Red', 4: 'Sandy'}
-
-crop_mapping ={0: 'Barley', 1: 'Cotton', 2: 'Ground Nuts', 3: 'Maize', 4: 'Millets', 5: 'Oil seeds', 6: 'Paddy', 7: 'Pulses', 8: 'Sugarcane', 9: 'Tobacco', 10: 'Wheat'}
 
 @router.post("/recommend")
 async def recommend_fertilizer(payload: FertilizerInput):
     model = get_fertilizer_model()
 
     try:
-        soil = soil_mapping.get(payload.soil_type.lower())
-        crop = crop_mapping.get(payload.crop_type.lower())
+        try:
+            mapped_label = crop_labels.index(payload.label.lower())
+        except ValueError:
+            mapped_label = 20 # default to rice if not found
 
-        if soil is None or crop is None:
-            raise HTTPException(status_code=400, detail="Invalid soil or crop type")
-
-        features = [[
+        features_arr = [[
+            payload.nitrogen,
+            payload.phosphorus,
+            payload.potassium,
             payload.temperature,
             payload.humidity,
-            payload.moisture,
-            soil,
-            crop,
-            payload.nitrogen,
-            payload.potassium,
-            payload.phosphorus
+            payload.ph,
+            payload.rainfall,
+            mapped_label
         ]]
 
-        prediction = model.predict(features)
+        try:
+            import pandas as pd
+            features = pd.DataFrame([{
+                'N': payload.nitrogen,
+                'P': payload.phosphorus,
+                'K': payload.potassium,
+                'temperature': payload.temperature,
+                'humidity': payload.humidity,
+                'ph': payload.ph,
+                'rainfall': payload.rainfall,
+                'label': mapped_label
+            }])
+            prediction = model.predict(features)
+        except Exception:
+            prediction = model.predict(features_arr)
 
-        fertilizer = prediction[0]
+        fertilizer_id = prediction[0]
+        fertname_dict = get_fertname_dict()
+        
+        try:
+            fertilizer_name = fertname_dict.get(int(fertilizer_id), str(fertilizer_id))
+        except Exception:
+            fertilizer_name = str(fertilizer_id)
 
         return {
-            "recommended_fertilizer": fertilizer
+            "recommended_fertilizer": fertilizer_name
         }
     except Exception as e:
         print("FERTILIZER ERROR:", str(e))
