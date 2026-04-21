@@ -12,15 +12,18 @@ except Exception as e:
     BaseEstimator = object
     print(f"Skipping sklearn due to {e}")
 try:
-    from tensorflow import keras
+    import tensorflow as _tf
+    keras = _tf.keras
     HAS_TF = True
+    print(f"TensorFlow {_tf.__version__} loaded successfully.")
 except Exception as e:
     HAS_TF = False
     keras = None
     print(f"Skipping TF due to {e}")
 
 MODEL_DIR = Path(__file__).resolve().parents[2] / "saved_model"
-DISEASE_MODEL_PATH = MODEL_DIR / "plant_saved_model_tf"
+# Model is saved as .h5 file (Keras HDF5 format from Colab training)
+DISEASE_MODEL_PATH = MODEL_DIR / "plant_saved_model_tf.h5"
 CLASS_NAMES_PATH = MODEL_DIR / "class_names.txt"
 DISEASE_SOLUTIONS_PATH = Path(__file__).resolve().parents[1] / "models" / "disease_solutions.json"
 CROP_MODEL_PATH = MODEL_DIR / "crop_recomen.pkl"
@@ -42,11 +45,20 @@ class LoadedModels:
 loaded = LoadedModels()
 
 
-def load_class_names() -> list[str]:
-    if not CLASS_NAMES_PATH.exists():
-        raise FileNotFoundError(f"class_names.txt not found at {CLASS_NAMES_PATH}")
-    with open(CLASS_NAMES_PATH, "r", encoding="utf-8") as f:
-        return [line.strip() for line in f if line.strip()]
+def load_class_names(model=None) -> list[str]:
+    """Load class names from file. Falls back to model output shape if file is missing."""
+    if CLASS_NAMES_PATH.exists():
+        with open(CLASS_NAMES_PATH, "r", encoding="utf-8") as f:
+            names = [line.strip() for line in f if line.strip()]
+        print(f"Loaded {len(names)} class names from {CLASS_NAMES_PATH}")
+        return names
+    if model is not None:
+        # Auto-generate placeholder names from model output shape
+        num_classes = model.output_shape[-1]
+        print(f"[WARNING] class_names.txt not found. Generating {num_classes} placeholder names.")
+        return [f"class_{i}" for i in range(num_classes)]
+    print("[WARNING] class_names.txt not found and no model available. Class names will be empty.")
+    return []
 
 
 def load_disease_model():
@@ -54,8 +66,11 @@ def load_disease_model():
         print("TensorFlow not installed. Disease model not loaded.")
         return None
     if not DISEASE_MODEL_PATH.exists():
-        raise FileNotFoundError(f"Disease model folder not found at {DISEASE_MODEL_PATH}")
+        print(f"[WARNING] Disease model not found at {DISEASE_MODEL_PATH}")
+        return None
+    print(f"Loading disease model from {DISEASE_MODEL_PATH}...")
     model = keras.models.load_model(str(DISEASE_MODEL_PATH))
+    print("Disease model loaded successfully.")
     return model
 
 
@@ -98,7 +113,8 @@ def load_fertname_dict():
 
 def initialize_models():
     loaded.disease_model = load_disease_model()
-    loaded.class_names = load_class_names()
+    # Pass the model so class names can be inferred from output shape if txt is missing
+    loaded.class_names = load_class_names(model=loaded.disease_model)
     loaded.disease_solutions = load_disease_solutions()
     loaded.crop_model = load_crop_model()
     loaded.fertilizer_model = load_fertilizer_model()
@@ -106,8 +122,7 @@ def initialize_models():
 
 
 def get_disease_model():
-    if loaded.disease_model is None:
-        raise RuntimeError("Disease model not loaded")
+    """Returns the disease model, or None if not loaded (caller handles None)."""
     return loaded.disease_model
 
 
