@@ -65,10 +65,28 @@ const FertilizerRecommendation = () => {
         {/* Crop Type */}
         <select name="crop_type" className="p-3 border rounded-lg" onChange={handleChange}>
           <option value="">Select Crop Type</option>
-          <option value="rice">Rice</option>
-          <option value="maize">Maize</option>
+          <option value="apple">Apple</option>
+          <option value="banana">Banana</option>
+          <option value="blackgram">Blackgram</option>
+          <option value="chickpea">Chickpea</option>
+          <option value="coconut">Coconut</option>
+          <option value="coffee">Coffee</option>
           <option value="cotton">Cotton</option>
-          <option value="sugarcane">Sugarcane</option>
+          <option value="grapes">Grapes</option>
+          <option value="jute">Jute</option>
+          <option value="kidneybeans">Kidneybeans</option>
+          <option value="lentil">Lentil</option>
+          <option value="maize">Maize</option>
+          <option value="mango">Mango</option>
+          <option value="mothbeans">Mothbeans</option>
+          <option value="mungbean">Mungbean</option>
+          <option value="muskmelon">Muskmelon</option>
+          <option value="orange">Orange</option>
+          <option value="papaya">Papaya</option>
+          <option value="pigeonpeas">Pigeonpeas</option>
+          <option value="pomegranate">Pomegranate</option>
+          <option value="rice">Rice</option>
+          <option value="watermelon">Watermelon</option>
         </select>
 
         <input name="nitrogen" placeholder="Nitrogen (N)" className="p-3 border rounded-lg" onChange={handleChange} />

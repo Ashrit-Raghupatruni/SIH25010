@@ -10,6 +10,14 @@ router = APIRouter(prefix="/fertilizer", tags=["fertilizer"])
 async def recommend_fertilizer(payload: FertilizerInput):
     model = get_fertilizer_model()
 
+    crop_labels = [
+        "apple", "banana", "blackgram", "chickpea", "coconut",
+        "coffee", "cotton", "grapes", "jute", "kidneybeans",
+        "lentil", "maize", "mango", "mothbeans", "mungbean",
+        "muskmelon", "orange", "papaya", "pigeonpeas",
+        "pomegranate", "rice", "watermelon"
+    ]
+
     try:
         try:
             mapped_label = crop_labels.index(payload.label.lower())
